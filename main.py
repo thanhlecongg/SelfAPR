@@ -489,9 +489,6 @@ def validate(bug_id, src_dir, buggy_file, buggy_loc, output_dir="./"):
                     f.write('- ' + buggyLines.strip() + "\n")
                     f.write('+ ' + patch.strip())
                     
-
- 
-
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
     parser.add_argument('--task', type=str)
