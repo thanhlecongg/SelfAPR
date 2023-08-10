@@ -498,7 +498,7 @@ if __name__ == "__main__":
     parser.add_argument('--buggy_loc', type=int, default=1797)
     parser.add_argument('--output_folder', type=str, default='/output/')
     parser.add_argument('--top_n_patches', type=int, default=5)
-    parser.add_argument('--device', type=int, default=2)
+    parser.add_argument('--device', type=int, default=0)
     print("Start Time: " + current_formatted_time())
     args = parser.parse_args()
     print("Run with setting:")
