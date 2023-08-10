@@ -468,9 +468,13 @@ def validate(bug_id, src_dir, buggy_file, buggy_loc, output_dir="./"):
     shutil.copytree(src_dir, validation_dir)
     patchFromPath=os.path.join(output_dir, "raw_results.csv")
     patchToPath=os.path.join(output_dir, "plausible_patches.csv")
+    patchFolder=os.path.join(output_dir, "patches")
+    os.makedirs(patchFolder, exist_ok=True)
     if os.path.exists(patchToPath):
         os.remove(patchToPath)
     origin_buggy_file = os.path.join(src_dir, buggy_file)
+    buggyLines = open(origin_buggy_file, "r").readlines()[buggy_loc-1]
+
     with open(patchFromPath,'r') as patchFile:
         patches = patchFile.readlines()
         for idx, patch in enumerate(patches):
@@ -478,6 +482,13 @@ def validate(bug_id, src_dir, buggy_file, buggy_loc, output_dir="./"):
             exeresult = executePatch(validation_dir, patch, origin_buggy_file, buggy_file, buggy_loc)
             with open(patchToPath,'a') as targetFile:
                 targetFile.write(exeresult+'\t'+str(idx)+'\t'+patch)
+            
+            if exeresult == "[Plausible]":
+                diff_path = os.path.join(patchFolder, f"{idx}.diff")
+                with open(diff_path, "w") as f:
+                    f.write('- ' + buggyLines.strip() + "\n")
+                    f.write('+ ' + patch.strip())
+                    
 
  
 
@@ -488,7 +499,7 @@ if __name__ == "__main__":
     parser.add_argument('--src_dir', type=str, default='test_prj')
     parser.add_argument('--buggy_file', type=str, default='source/org/jfree/chart/renderer/category/AbstractCategoryItemRenderer.java')
     parser.add_argument('--buggy_loc', type=int, default=1797)
-    parser.add_argument('--output_folder', type=str, default='/output/patches')
+    parser.add_argument('--output_folder', type=str, default='/output/')
     parser.add_argument('--top_n_patches', type=int, default=5)
     parser.add_argument('--device', type=int, default=2)
     print("Start Time: " + current_formatted_time())
