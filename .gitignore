@@ -1,1 +1,3 @@
 .DS_Store
+zenodo_data/*
+test_prj/*

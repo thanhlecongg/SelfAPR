@@ -49,7 +49,7 @@ def getBugName(bugid):
 
 
         
-def test( model, tokenizer, device, loader,epoch):
+def test( model, tokenizer, device, loader, epoch):
     
     return_sequences = 50
     model.eval()
@@ -92,12 +92,6 @@ def test( model, tokenizer, device, loader,epoch):
                     for i in range(0,return_sequences):
                         filewriter.writerow([bugname, startNo,removeNo,filepath,preds[i],target])
 
-
-
-            
-                
-
-
 def getGeneratorDataLoader(filepatch,tokenizer,batchsize):
     df = pd.read_csv(filepatch,encoding='latin-1',delimiter='\t')
     print(df.head(1))
@@ -115,14 +109,12 @@ def getGeneratorDataLoader(filepatch,tokenizer,batchsize):
     target_loader = DataLoader(target_set, **params)
     return target_loader
 
-
-
-
 def run_test(epoch):
       
     for i in range(0,10):
-        gen = T5ForConditionalGeneration.from_pretrained('./model_SelfAPR_ALL/SelfAPR'+str(i+1),output_hidden_states=True)       
-        gen_tokenizer = T5Tokenizer.from_pretrained('./model_SelfAPR_ALL/SelfAPR'+str(i+1),truncation=True)
+        print("Running {}".format(i))
+        gen = T5ForConditionalGeneration.from_pretrained('/repair/models/SelfAPR'+str(i+1),output_hidden_states=True)       
+        gen_tokenizer = T5Tokenizer.from_pretrained('/repair/models/SelfAPR'+str(i+1),truncation=True)
         gen_tokenizer.add_tokens(['[PATCH]','[BUG]','{', '}','<','^','<=','>=','==','!=','<<','>>','[CE]','[FE]','[CONTEXT]','[BUGGY]','[CLASS]','[METHOD]','[RETURN_TYPE]','[VARIABLES]','[Delete]'])   
         gen = gen.to(device)       
         test_loader=getGeneratorDataLoader(TEST_PATH,gen_tokenizer,1)
@@ -136,7 +128,7 @@ if __name__ == '__main__':
     VALID_BATCH_SIZE = 1
     MAX_LEN = 384
     PATCH_LEN = 76 
-    device = 'cuda' if cuda.is_available() else 'cpu'
+    device = 'cuda:2' if cuda.is_available() else 'cpu'
 
     TEST_PATH='./dataset/test.csv'
         

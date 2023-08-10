@@ -40,7 +40,7 @@ def executePatch(projectId,bugId,startNo,removedNo,fpath,predit,repodir):
 def execute(patchId,repodir,originFile,rootdir):
     compile_error_flag = True
 
-    program_path=repodir+'/'+patchId
+    program_path = repodir+'/'+patchId
     print('****************'+program_path+'******************')
     #get compile result
     cmd = "cd " + program_path + ";"
