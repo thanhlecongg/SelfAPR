@@ -450,7 +450,7 @@ def validate(bug_id, src_dir, buggy_file, buggy_loc, output_dir="./"):
     validation_dir = '/tmp/' + bug_id
     subprocess.run('rm -rf ' + validation_dir, shell=True)
     shutil.copytree(src_dir, validation_dir)
-    patchFromPath=os.path.join(output_dir, "raw_results.csv")
+    patchFromPath=os.path.join(output_dir, "results.csv")
     patchToPath=os.path.join(output_dir, "validated_patches.csv")
     patchFolder=os.path.join(output_dir, "patches")
     os.makedirs(patchFolder, exist_ok=True)
