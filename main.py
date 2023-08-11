@@ -473,7 +473,7 @@ def validate(bug_id, src_dir, buggy_file, buggy_loc, output_dir="./"):
                     f.write('- ' + buggyLines.strip() + "\n")
                     f.write('+ ' + patch.strip())
                 break
-                    
+              
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
     parser.add_argument('--task', type=str)
@@ -498,6 +498,22 @@ if __name__ == "__main__":
         if os.path.exists(output_path):
             os.remove(output_path)
         repair(args.top_n_patches, output_path)
+        
+        patches = [] * (args.top_n_patches * 10)
+        with open(output_path,'r') as patchFile:
+            raw_patches = patchFile.readlines()
+            for idx, patch in enumerate(raw_patches):
+                run_idx = idx // args.top_n_patches
+                rank_idx = idx % args.top_n_patches
+                patches[rank_idx * 10 + run_idx] = patch
+        
+        result_path = os.path.join(args.output_folder, "results.csv")
+        if os.path.exists(result_path):
+            os.remove(result_path)
+        with open(result_path,'a') as targetFile:
+            for patch in patches:
+                targetFile.write(patch)        
+
     elif args.task == "validate":
         validate(args.bug_id, args.src_dir, args.buggy_file, args.buggy_loc, args.output_folder)
     print("End Time: " + current_formatted_time())
