@@ -504,7 +504,7 @@ if __name__ == "__main__":
             raw_patches = patchFile.readlines()
             for rank_idx in range(args.top_n_patches):
                 for run_idx in range(10):
-                    patches.append(raw_patches[run_idx * 10 + rank_idx])
+                    patches.append(raw_patches[run_idx * args.top_n_patches + rank_idx])
         
         result_path = os.path.join(args.output_folder, "results.csv")
         if os.path.exists(result_path):
