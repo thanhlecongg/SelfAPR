@@ -166,7 +166,7 @@ def constructTestSample(bugId, indexId, targetfile, repodir, rootdir, startLineN
     print(diagnosticMsg)
 
 
-    cmd = 'timeout 200 java -jar /repair/SelfAPR/zenodo_data/SelfAPR/perturbation_model/target/perturbation-0.0.1-SNAPSHOT-jar-with-dependencies.jar '+targetfile+' test-'+startLineNo
+    cmd = 'timeout 200 java -jar /repair/perturbation_model/target/perturbation-0.0.1-SNAPSHOT-jar-with-dependencies.jar '+targetfile+' test-'+startLineNo
     result = subprocess.run(cmd, stdout=subprocess.PIPE, stderr=subprocess.PIPE, shell=True)
     print(result)
     result = str(result)
